@@ -1,0 +1,9 @@
+{
+  "query": "SELECT id, variety, color, stripePriceId2Stem, stripePriceId4Stem, stripePriceId6Stem FROM harvest_listings WHERE stripePriceId2Stem LIKE '%TdWl%' OR stripePriceId4Stem LIKE '%TdWl%' OR stripePriceId6Stem LIKE '%TdWl%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 9fzk87Y3WsdYaaD.5ff23a0adf57 --database oKaw6F2tCcS6GS9c4BJX8L --execute SELECT id, variety, color, stripePriceId2Stem, stripePriceId4Stem, stripePriceId6Stem FROM harvest_listings WHERE stripePriceId2Stem LIKE '%TdWl%' OR stripePriceId4Stem LIKE '%TdWl%' OR stripePriceId6Stem LIKE '%TdWl%';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 274
+}

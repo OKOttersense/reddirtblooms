@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE harvest_listings SET stripePriceId6Stem = 'price_1TeczbGrVUHindMrH849c67F' WHERE variety = 'Verbena' AND color = 'Purple';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 9fzk87Y3WsdYaaD.5ff23a0adf57 --database oKaw6F2tCcS6GS9c4BJX8L --execute UPDATE harvest_listings SET stripePriceId6Stem = 'price_1TeczbGrVUHindMrH849c67F' WHERE variety = 'Verbena' AND color = 'Purple';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 3508
+}

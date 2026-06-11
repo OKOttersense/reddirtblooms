@@ -1,0 +1,19 @@
+{
+  "query": "SELECT id, businessName, contactName, email, city, status, createdAt FROM florist_accounts ORDER BY createdAt DESC LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 9fzk87Y3WsdYaaD.5ff23a0adf57 --database oKaw6F2tCcS6GS9c4BJX8L --execute SELECT id, businessName, contactName, email, city, status, createdAt FROM florist_accounts ORDER BY createdAt DESC LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "businessName": "Bloom Test",
+      "contactName": "Lance",
+      "email": "lance.a.neely@gmail.com",
+      "city": "Norman",
+      "status": "pending",
+      "createdAt": "2026-06-01 06:36:04"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tbusinessName\tcontactName\temail\tcity\tstatus\tcreatedAt\n1\tBloom Test\tLance\tlance.a.neely@gmail.com\tNorman\tpending\t2026-06-01 06:36:04\n",
+  "stderr": "",
+  "execution_time_ms": 388
+}

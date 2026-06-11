@@ -1,0 +1,1 @@
+ALTER TABLE `harvest_listings` ADD `isSoldOut` boolean DEFAULT false NOT NULL;

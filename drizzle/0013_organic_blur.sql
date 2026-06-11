@@ -1,0 +1,1 @@
+ALTER TABLE `florist_accounts` DROP COLUMN `stripeCustomerId`;

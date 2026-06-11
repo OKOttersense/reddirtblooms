@@ -1,0 +1,2 @@
+ALTER TABLE `florist_accounts` MODIFY COLUMN `status` enum('pending','approved','declined') NOT NULL DEFAULT 'pending';--> statement-breakpoint
+ALTER TABLE `florist_accounts` MODIFY COLUMN `stripeCustomerId` varchar(128);

@@ -1,0 +1,8 @@
+{
+  "query": "SELECT flowerName, pricingTier, focalPrice FROM harvest_listings WHERE flowerName IN ('Gaura', 'Yarrow (White)', 'Yarrow (Red)', \"Lamb's Ear\", \"St John's Wort\", 'Bee Balm (Pink)', 'Gomphrena (Red)', 'Verbena (Purple)') ORDER BY flowerName;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 9fzk87Y3WsdYaaD.5ff23a0adf57 --database oKaw6F2tCcS6GS9c4BJX8L --execute SELECT flowerName, pricingTier, focalPrice FROM harvest_listings WHERE flowerName IN ('Gaura', 'Yarrow (White)', 'Yarrow (Red)', \"Lamb's Ear\", \"St John's Wort\", 'Bee Balm (Pink)', 'Gomphrena (Red)', 'Verbena (Purple)') ORDER BY flowerName;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'flowername' in 'where clause'"
+  ]
+}

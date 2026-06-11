@@ -1,0 +1,9 @@
+{
+  "query": "SELECT variety, color, pricingTier, price2Stem, price4Stem, price6Stem FROM harvest_listings WHERE (variety = 'Gaura' OR variety = 'Yarrow' OR variety = \"Lamb's Ear\" OR variety = \"St John's Wort\" OR variety = 'Bee Balm' OR variety = 'Gomphrena' OR variety = 'Verbena') AND isPublished = true ORDER BY variety, color;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 9fzk87Y3WsdYaaD.5ff23a0adf57 --database oKaw6F2tCcS6GS9c4BJX8L --execute SELECT variety, color, pricingTier, price2Stem, price4Stem, price6Stem FROM harvest_listings WHERE (variety = 'Gaura' OR variety = 'Yarrow' OR variety = \"Lamb's Ear\" OR variety = \"St John's Wort\" OR variety = 'Bee Balm' OR variety = 'Gomphrena' OR variety = 'Verbena') AND isPublished = true ORDER BY variety, color;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 389
+}

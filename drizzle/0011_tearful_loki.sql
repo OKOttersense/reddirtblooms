@@ -1,0 +1,1 @@
+ALTER TABLE `florist_accounts` MODIFY COLUMN `stripeCustomerId` varchar(128) DEFAULT null;

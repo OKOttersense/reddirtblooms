@@ -1,0 +1,74 @@
+{
+  "query": "SELECT id, variety, color, stripePriceId2Stem, stripePriceId4Stem, stripePriceId6Stem FROM harvest_listings;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 9fzk87Y3WsdYaaD.5ff23a0adf57 --database oKaw6F2tCcS6GS9c4BJX8L --execute SELECT id, variety, color, stripePriceId2Stem, stripePriceId4Stem, stripePriceId6Stem FROM harvest_listings;",
+  "rows": [
+    {
+      "id": "1",
+      "variety": "Gaura",
+      "color": "White",
+      "stripePriceId2Stem": "price_1TeTfeGrVUHindMrxaSH8N1p",
+      "stripePriceId4Stem": "price_1TeTfgGrVUHindMrr4laOhGp",
+      "stripePriceId6Stem": "price_1TeTfiGrVUHindMrQiQtMHzl"
+    },
+    {
+      "id": "2",
+      "variety": "Yarrow",
+      "color": "White",
+      "stripePriceId2Stem": "price_1TeTfkGrVUHindMrzFFPd8h7",
+      "stripePriceId4Stem": "price_1TeTfmGrVUHindMrkivW23pQ",
+      "stripePriceId6Stem": "price_1TeTfoGrVUHindMrOqQ20bth"
+    },
+    {
+      "id": "3",
+      "variety": "Yarrow",
+      "color": "Red",
+      "stripePriceId2Stem": "price_1TeTfqGrVUHindMrzs00fACZ",
+      "stripePriceId4Stem": "price_1TeTfsGrVUHindMr6Y9A0ZZD",
+      "stripePriceId6Stem": "price_1TeTfuGrVUHindMr39MNleKl"
+    },
+    {
+      "id": "4",
+      "variety": "Lamb's Ear",
+      "color": "Silver",
+      "stripePriceId2Stem": "price_1TeTfxGrVUHindMrnrieqF4x",
+      "stripePriceId4Stem": "price_1TeTfzGrVUHindMr2cIBw33i",
+      "stripePriceId6Stem": "price_1TeTg1GrVUHindMrk4kbGzOC"
+    },
+    {
+      "id": "5",
+      "variety": "St John's Wort",
+      "color": "Yellow",
+      "stripePriceId2Stem": "price_1TeTg3GrVUHindMrZjT8zsCg",
+      "stripePriceId4Stem": "price_1TeTg5GrVUHindMrGW0qRQQl",
+      "stripePriceId6Stem": "price_1TeTg7GrVUHindMrZuWJikq2"
+    },
+    {
+      "id": "6",
+      "variety": "Bee Balm",
+      "color": "Pink",
+      "stripePriceId2Stem": "price_1TeTg9GrVUHindMr9UWO0nDf",
+      "stripePriceId4Stem": "price_1TeTgBGrVUHindMrp9hNFQv6",
+      "stripePriceId6Stem": "price_1TeTgDGrVUHindMr0wkzrPxc"
+    },
+    {
+      "id": "7",
+      "variety": "Gomphrena",
+      "color": "Red",
+      "stripePriceId2Stem": "price_1TeTgFGrVUHindMrL8CFfzi6",
+      "stripePriceId4Stem": "price_1TeTgHGrVUHindMrqeow4KQ2",
+      "stripePriceId6Stem": "price_1TeTgJGrVUHindMrLIOOvikM"
+    },
+    {
+      "id": "8",
+      "variety": "Verbena",
+      "color": "Purple",
+      "stripePriceId2Stem": "price_1TeTgMGrVUHindMrRQZZgBkv",
+      "stripePriceId4Stem": "price_1TeTgOGrVUHindMr5LbRWhFc",
+      "stripePriceId6Stem": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tvariety\tcolor\tstripePriceId2Stem\tstripePriceId4Stem\tstripePriceId6Stem\n1\tGaura\tWhite\tprice_1TeTfeGrVUHindMrxaSH8N1p\tprice_1TeTfgGrVUHindMrr4laOhGp\tprice_1TeTfiGrVUHindMrQiQtMHzl\n2\tYarrow\tWhite\tprice_1TeTfkGrVUHindMrzFFPd8h7\tprice_1TeTfmGrVUHindMrkivW23pQ\tprice_1TeTfoGrVUHindMrOqQ20bth\n3\tYarrow\tRed\tprice_1TeTfqGrVUHindMrzs00fACZ\tprice_1TeTfsGrVUHindMr6Y9A0ZZD\tprice_1TeTfuGrVUHindMr39MNleKl\n4\tLamb's Ear\tSilver\tprice_1TeTfxGrVUHindMrnrieqF4x\tprice_1TeTfzGrVUHindMr2cIBw33i\tprice_1TeTg1GrVUHindMrk4kbGzOC\n5\tSt John's Wort\tYellow\tprice_1TeTg3GrVUHindMrZjT8zsCg\tprice_1TeTg5GrVUHindMrGW0qRQQl\tprice_1TeTg7GrVUHindMrZuWJikq2\n6\tBee Balm\tPink\tprice_1TeTg9GrVUHindMr9UWO0nDf\tprice_1TeTgBGrVUHindMrp9hNFQv6\tprice_1TeTgDGrVUHindMr0wkzrPxc\n7\tGomphrena\tRed\tprice_1TeTgFGrVUHindMrL8CFfzi6\tprice_1TeTgHGrVUHindMrqeow4KQ2\tprice_1TeTgJGrVUHindMrLIOOvikM\n8\tVerbena\tPurple\tprice_1TeTgMGrVUHindMrRQZZgBkv\tprice_1TeTgOGrVUHindMr5LbRWhFc\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 258
+}
