@@ -18,7 +18,29 @@ import { galleryRouter } from "./routers/gallery";
 import { stripeSyncRouter } from "./routers/stripeSync";
 import { syncFloristToGHL, syncContactToGHL } from "./ghl";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
+// Lazy-init: don't crash at import time if STRIPE_SECRET_KEY is missing
+let _stripe: Stripe | null = null;
+function getStripe(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error("STRIPE_SECRET_KEY is not set — cannot process payments.");
+    _stripe = new Stripe(key);
+  }
+  return _stripe;
+}
+
+// ── Simple in-memory rate limiter (per IP, sliding window) ──
+const rateBuckets = new Map<string, number[]>();
+function rateLimit(ip: string, limit: number, windowMs: number): boolean {
+  const now = Date.now();
+  const hits = (rateBuckets.get(ip) || []).filter((t) => now - t < windowMs);
+  if (hits.length >= limit) { rateBuckets.set(ip, hits); return false; }
+  hits.push(now);
+  rateBuckets.set(ip, hits);
+  // prevent unbounded memory growth
+  if (rateBuckets.size > 10000) rateBuckets.clear();
+  return true;
+}
 
 export const appRouter = router({
   system: systemRouter,
@@ -48,7 +70,11 @@ export const appRouter = router({
         name: z.string().optional(),
         source: z.string().optional(),
       }))
-      .mutation(async ({ input }) => {
+      .mutation(async ({ input, ctx }) => {
+        const ip = (ctx.req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || ctx.req.ip || "unknown";
+        if (!rateLimit(`subscribe:${ip}`, 5, 60_000)) {
+          throw new Error("Too many signup attempts — please try again in a minute.");
+        }
         const db = await getDb();
         if (!db) throw new Error("Database unavailable");
         try {
@@ -113,7 +139,7 @@ export const appRouter = router({
         if (!product) throw new Error("Product not found");
         if (!product.stripePriceId) throw new Error("Product price not configured");
         const userEmail = ctx.user?.email || input.customerEmail;
-        const session = await stripe.checkout.sessions.create({
+        const session = await getStripe().checkout.sessions.create({
           mode: "payment",
           payment_method_types: ["card"],
           line_items: [{ price: product.stripePriceId, quantity: 1 }],
@@ -174,7 +200,7 @@ export const appRouter = router({
           quantity: item.quantity,
         }));
 
-        const session = await stripe.checkout.sessions.create({
+        const session = await getStripe().checkout.sessions.create({
           mode: "payment",
           payment_method_types: ["card"],
           line_items: lineItems,
@@ -210,10 +236,15 @@ export const appRouter = router({
         message: z.string().min(1).max(500),
         history: z.array(z.object({
           role: z.enum(["user", "assistant"]),
-          content: z.string(),
-        })).optional(),
+          content: z.string().max(1000),
+        })).max(20).optional(),
       }))
-      .mutation(async ({ input }) => {
+      .mutation(async ({ input, ctx }) => {
+        // Rate limit: 10 messages/minute per IP — Dusty costs money per call
+        const ip = (ctx.req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || ctx.req.ip || "unknown";
+        if (!rateLimit(`dusty:${ip}`, 10, 60_000)) {
+          return { reply: "Whoa there, neighbor! Y'all are typing faster than a prairie wind. Give me a minute to catch up. 🌻" };
+        }
         const systemPrompt = `You are Dusty, the friendly AI assistant for Red Dirt Blooms — an organic flower farm in Oklahoma City, Oklahoma. Named after Oklahoma's famous dusty red roads.
 
 Personality: Warm, friendly, authentically Oklahoman. Use phrases like "Well hey there!", "You bet!", "y'all". Enthusiastic about Oklahoma and local community.

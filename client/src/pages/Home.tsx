@@ -40,11 +40,11 @@ const PRODUCTS = [
   { name: "Weekly Bloom Share (12-Week)", desc: "12 weekly bouquets from June 12 through August 27. Fresh-cut Oklahoma flowers, every week.", price: "$396", qty: 3, img: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=400&q=80" },
 ];
 
-// Testimonials
+// Testimonials — real customers
 const TESTIMONIALS = [
-  { name: "Sarah M.", city: "Edmond, OK", text: "I've been getting the Bloom Box all summer and every single bouquet has been absolutely stunning. Nothing from a grocery store comes close.", stars: 5 },
-  { name: "Jennifer T.", city: "Norman, OK", text: "Ordered for my daughter's birthday and the flowers lasted nearly two weeks. You can just tell they were grown with real care. Will order again!", stars: 5 },
-  { name: "Lisa K.", city: "Yukon, OK", text: "Love supporting a local Oklahoma farm. The Bloom Watch emails are so fun — I feel like I'm watching the flowers grow week by week.", stars: 5 },
+  { name: "Leslie K.", city: "Norman, OK", text: "The flowers were beautiful. They made our event magical!", stars: 5 },
+  { name: "Randy N.", city: "Oklahoma City, OK", text: "It's amazing what this guy can do with some seeds!", stars: 5 },
+  { name: "Ellen D.", city: "Broken Arrow, OK", text: "Gorgeous. Just gorgeous!", stars: 5 },
 ];
 
 // Fake Instagram posts
@@ -101,9 +101,9 @@ function BloomProgress({ pct }: { pct: number }) {
 export default function Home() {
   const [email, setEmail] = useState("");
   const [bloomEmail, setBloomEmail] = useState("");
-  const [scarcity] = useState(() =>
-    PRODUCTS.map(() => Math.floor(Math.random() * 12) + 3)
-  );
+  // "Wake Me" inline capture: which flower card is expanded + the email typed
+  const [wakeFlower, setWakeFlower] = useState<string | null>(null);
+  const [wakeEmail, setWakeEmail] = useState("");
 
    const subscribeMutation = trpc.bloomWatch.subscribe.useMutation({
     onSuccess: (data) => {
@@ -122,7 +122,23 @@ export default function Home() {
     subscribeMutation.mutate({ email, source: "homepage-section" });
   };
   const handleWakeMeUp = (flowerName: string) => {
-    toast.success(`We'll wake you when the ${flowerName} is ready! 🌱`);
+    // First tap expands the inline email field on that card
+    setWakeFlower((cur) => (cur === flowerName ? null : flowerName));
+    setWakeEmail("");
+  };
+  const handleWakeSubmit = (e: React.FormEvent, flowerName: string) => {
+    e.preventDefault();
+    if (!wakeEmail) return;
+    subscribeMutation.mutate(
+      { email: wakeEmail, source: `wake-me:${flowerName}` },
+      {
+        onSuccess: () => {
+          toast.success(`We'll wake you when the ${flowerName} is ready! 🌱`);
+          setWakeFlower(null);
+          setWakeEmail("");
+        },
+      }
+    );
   };
   const handleHeroEmail = (e: React.FormEvent) => {
     e.preventDefault();
@@ -286,14 +302,36 @@ export default function Home() {
                     </div>
                     <BloomProgress pct={flower.stage} />
 
-                    <div className="mt-3 flex items-center justify-between">
-                      <span className="font-accent text-[#7A8C6E] text-sm">{flower.eta}</span>
-                      <button
-                        onClick={() => handleWakeMeUp(flower.name)}
-                        className="font-body text-xs font-semibold bg-[#B5451B] text-[#F5F0E8] px-3 py-1.5 rounded hover:bg-[#9e3c17] transition-colors"
-                      >
-                        Wake Me When It Blooms
-                      </button>
+                    <div className="mt-3">
+                      <div className="flex items-center justify-between">
+                        <span className="font-accent text-[#7A8C6E] text-sm">{flower.eta}</span>
+                        <button
+                          onClick={() => handleWakeMeUp(flower.name)}
+                          className="font-body text-xs font-semibold bg-[#B5451B] text-[#F5F0E8] px-3 py-1.5 rounded hover:bg-[#9e3c17] transition-colors"
+                        >
+                          {wakeFlower === flower.name ? "Never mind" : "Wake Me When It Blooms"}
+                        </button>
+                      </div>
+                      {wakeFlower === flower.name && (
+                        <form onSubmit={(e) => handleWakeSubmit(e, flower.name)} className="mt-3 flex gap-2">
+                          <input
+                            type="email"
+                            value={wakeEmail}
+                            onChange={(e) => setWakeEmail(e.target.value)}
+                            placeholder="your@email.com"
+                            required
+                            autoFocus
+                            className="flex-1 min-w-0 border border-[#B5451B]/30 rounded px-2 py-1.5 font-body text-xs text-[#2A1F1A] focus:outline-none focus:ring-1 focus:ring-[#B5451B]"
+                          />
+                          <button
+                            type="submit"
+                            disabled={subscribeMutation.isPending}
+                            className="font-body text-xs font-semibold bg-[#7A8C6E] text-[#F5F0E8] px-3 py-1.5 rounded hover:bg-[#6a7a5e] transition-colors disabled:opacity-50"
+                          >
+                            {subscribeMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : "Notify Me"}
+                          </button>
+                        </form>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -424,7 +462,7 @@ export default function Home() {
                     <p className="font-body text-[#2A1F1A]/60 text-xs mb-3 leading-relaxed">{product.desc}</p>
                     <div className="scarcity-badge mb-3">
                       <Flower2 className="w-3 h-3" />
-                      Only {scarcity[i]} left from today's harvest
+                      Only {product.qty} left from today's harvest
                     </div>
                     <Link href="/harvest-stand">
                       <button className="w-full bg-[#E8A020] hover:bg-[#d4911a] text-[#2A1F1A] font-body font-semibold text-sm py-2.5 rounded transition-colors">
