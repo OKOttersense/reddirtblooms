@@ -14,7 +14,19 @@ import { getFloristFromRequest } from "./floristAuth";
 import { notifyOwner } from "../_core/notification";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", { apiVersion: "2025-04-30" as any });
+// Lazy-init: don't crash at import time if STRIPE_SECRET_KEY is missing
+// (this was breaking unrelated test suites that import this module).
+let _stripe: Stripe | null = null;
+function getStripe(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) {
+      throw new Error("STRIPE_SECRET_KEY is not set — cannot process payments.");
+    }
+    _stripe = new Stripe(key, { apiVersion: "2025-04-30" as any });
+  }
+  return _stripe;
+}
 
 // ── helper: require approved florist session ──────────────────────────────────
 
@@ -148,7 +160,7 @@ export const floristPortalRouter = router({
       );
 
       // Create Stripe checkout session
-      const session = await stripe.checkout.sessions.create({
+      const session = await getStripe().checkout.sessions.create({
         mode: "payment",
         line_items: lineItems,
         customer_email: florist.email,

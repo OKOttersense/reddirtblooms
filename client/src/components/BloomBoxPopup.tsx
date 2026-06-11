@@ -33,24 +33,11 @@ const SUPPRESSED_PATHS = [
   "/order-success",
 ];
 
-function getScarcity(): number {
-  const stored = localStorage.getItem("bbp_scarcity");
-  if (stored) {
-    const n = Math.max(1, parseInt(stored, 10) - 1);
-    localStorage.setItem("bbp_scarcity", String(n));
-    return n;
-  }
-  const initial = Math.floor(Math.random() * 74) + 2;
-  localStorage.setItem("bbp_scarcity", String(initial));
-  return initial;
-}
-
 export default function BloomBoxPopup() {
   // "mounted" controls whether the DOM node exists at all
   const [mounted, setMounted] = useState(false);
   // "visible" drives the CSS transition classes (fade-in vs fade-out)
   const [visible, setVisible] = useState(false);
-  const [scarcity] = useState(() => getScarcity());
   const [location] = useLocation();
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -195,7 +182,7 @@ export default function BloomBoxPopup() {
                 fontFamily: "'DM Sans', sans-serif",
               }}
             >
-              Only {scarcity} spot{scarcity === 1 ? "" : "s"} left this season
+              Limited spots each season — first come, first served
             </div>
           </div>
 

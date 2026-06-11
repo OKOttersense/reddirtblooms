@@ -151,7 +151,7 @@ export default function CSALanding() {
     onSuccess: (data) => {
       if (data.checkoutUrl) {
         toast.success("Redirecting to secure checkout…");
-        window.open(data.checkoutUrl, "_blank");
+        window.location.href = data.checkoutUrl;
       }
     },
     onError: (err) => {

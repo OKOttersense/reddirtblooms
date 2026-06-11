@@ -210,7 +210,7 @@ export default function FloristPortal() {
     if (cart.length === 0) return;
     try {
       const result = await checkoutMutation.mutateAsync({ items: cart.map((i) => ({ listingId: i.listingId, quantity: i.quantity })), origin: window.location.origin });
-      if (result.checkoutUrl) { window.open(result.checkoutUrl, "_blank"); setCartOpen(false); }
+      if (result.checkoutUrl) { window.location.href = result.checkoutUrl; }
     } catch (err: any) { toast.error(err.message ?? "Checkout failed. Please try again."); }
   }
 

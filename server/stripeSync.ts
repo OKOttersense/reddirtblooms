@@ -10,7 +10,16 @@ import Stripe from "stripe";
 import type { Stripe as StripeType } from "stripe";
 import { PricingTier, StemSize, TIER_PRICES, TIER_LABELS } from "./stripeProducts";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
+// Lazy-init: don't crash at import time if STRIPE_SECRET_KEY is missing
+let _stripe: Stripe | null = null;
+function getStripe(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error("STRIPE_SECRET_KEY is not set — cannot process payments.");
+    _stripe = new Stripe(key);
+  }
+  return _stripe;
+}
 
 export interface HarvestListingForSync {
   id: string;
@@ -83,7 +92,7 @@ export async function syncHarvestListingToStripe(
 
   try {
     // Create product
-    const product = await stripe.products.create({
+    const product = await getStripe().products.create({
       name: productName,
       description: `${stemSize}-stem bunch of ${listing.variety} (${listing.pricingTier} tier)`,
       metadata,
@@ -91,7 +100,7 @@ export async function syncHarvestListingToStripe(
     });
 
     // Create price
-    const price = await stripe.prices.create({
+    const price = await getStripe().prices.create({
       product: product.id,
       unit_amount: priceCents,
       currency: "usd",
@@ -170,7 +179,7 @@ export async function getRedDirtBloomsProducts(): Promise<Stripe.Product[]> {
   let startingAfter: string | undefined;
 
   while (hasMore) {
-    const page = await stripe.products.list({
+    const page = await getStripe().products.list({
       limit: 100,
       starting_after: startingAfter,
       expand: ["data.default_price"],

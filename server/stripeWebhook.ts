@@ -9,7 +9,16 @@ import { orders } from "../drizzle/schema";
 import { notifyOwner } from "./_core/notification";
 import { createGHLContactFromStripeCheckout, handleStripePaymentFailed } from "./webhooks/stripeGhlWebhook";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
+// Lazy-init: don't crash at import time if STRIPE_SECRET_KEY is missing
+let _stripe: Stripe | null = null;
+function getStripe(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error("STRIPE_SECRET_KEY is not set — cannot process payments.");
+    _stripe = new Stripe(key);
+  }
+  return _stripe;
+}
 
 export async function stripeWebhookHandler(req: Request, res: Response) {
   const sig = req.headers["stripe-signature"];
@@ -21,7 +30,7 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(
+    event = getStripe().webhooks.constructEvent(
       req.body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET || ""
