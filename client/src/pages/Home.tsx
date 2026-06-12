@@ -47,14 +47,6 @@ const TESTIMONIALS = [
   { name: "Ellen D.", city: "Broken Arrow, OK", text: "Gorgeous. Just gorgeous!", stars: 5 },
 ];
 
-// Fake Instagram posts
-const INSTA_POSTS = [
-  { id: 1, img: HERO_IMG, caption: "Day 14 — The zinnias are waking up 🌸", likes: 142, isVideo: false },
-  { id: 2, img: BLOOM_DIARY_IMG, caption: "Harvest morning ☀️ Red dirt never looked so good", likes: 218, isVideo: true },
-  { id: 3, img: BOUQUET_IMG, caption: "Today's cut — going to good homes 💐", likes: 189, isVideo: false },
-  { id: 4, img: "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=600&q=80", caption: "Sunflowers are showing off this week 🌻", likes: 97, isVideo: false },
-];
-
 function useIntersectionObserver(ref: React.RefObject<Element | null>) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -203,65 +195,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* ===== INSTAGRAM / BLOOM DIARY STRIP ===== */}
-      <section className="py-14 bg-[#F5F0E8]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeUp>
-            <div className="flex items-end justify-between mb-6">
-              <div>
-                <div className="font-accent text-[#B5451B] text-lg mb-1">From the Field</div>
-                <h2 className="font-heading text-[#2A1F1A] font-bold" style={{ fontSize: "2rem" }}>
-                  The Bloom Diary
-                </h2>
-              </div>
-              <Link href="/bloom-diary">
-                <span className="hidden sm:flex items-center gap-1 font-body text-sm text-[#7A8C6E] hover:text-[#B5451B] transition-colors font-medium">
-                  Watch the full diary <ChevronRight className="w-4 h-4" />
-                </span>
-              </Link>
-            </div>
-          </FadeUp>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {INSTA_POSTS.map((post, i) => (
-              <FadeUp key={post.id} delay={i * 80}>
-                <Link href="/bloom-diary">
-                  <div className="relative group overflow-hidden rounded aspect-square cursor-pointer">
-                    <img
-                      src={post.img}
-                      alt={post.caption}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    {post.isVideo && (
-                      <div className="absolute top-2 right-2 bg-black/50 rounded-full w-7 h-7 flex items-center justify-center">
-                        <Play className="w-3 h-3 text-white fill-white" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-[#2A1F1A]/0 group-hover:bg-[#2A1F1A]/50 transition-colors flex items-end p-3">
-                      <p className="font-body text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity leading-tight">
-                        {post.caption}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              </FadeUp>
-            ))}
-          </div>
-
-          <FadeUp delay={300}>
-            <div className="mt-4 text-center sm:hidden">
-              <Link href="/bloom-diary">
-                <span className="inline-flex items-center gap-1 font-body text-sm text-[#7A8C6E] hover:text-[#B5451B] transition-colors font-medium">
-                  Watch the full Bloom Diary <ChevronRight className="w-4 h-4" />
-                </span>
-              </Link>
-            </div>
-          </FadeUp>
-        </div>
-      </section>
-
-      <hr className="rust-rule mx-8" />
 
       {/* ===== WHAT'S IN THE GROUND ===== */}
       <section className="py-16 bg-[#F5F0E8]">
